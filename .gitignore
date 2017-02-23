@@ -1,0 +1,12 @@
+*.DS_Store
+*.pyc
+.git
+*.caffemodel
+env
+venv
+
+static/images/TestSet
+node_modules/
+npm-debug.log
+bower_components/
+.module-cache
