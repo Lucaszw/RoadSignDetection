@@ -25532,12 +25532,6 @@ process.env.NODE_ENV !== "production" ? StatisticValue.propTypes = {
       extension: ".jpg",
       index: Math.ceil(Math.random() * 299)
     };
-    this.style = {
-      width: "100%",
-      height: "100%",
-      backgroundSize: "100%",
-      backgroundRepeat: "no-repeat"
-    };
   }
   decreaseIndex(e) {
     if (this.state.index <= 0) return;
@@ -25556,13 +25550,33 @@ process.env.NODE_ENV !== "production" ? StatisticValue.propTypes = {
   componentDidMount() {
     this.props.glEventHub.on('prev-clicked', this.decreaseIndex.bind(this));
     this.props.glEventHub.on('next-clicked', this.increaseIndex.bind(this));
+    var context = this.canvas.getContext('2d');
+    this.paint(context);
+  }
+
+  componentDidUpdate() {
+    var context = this.canvas.getContext('2d');
+    this.paint(context);
+  }
+
+  paint(context) {
+    this.canvas.width = this.props.glContainer.width;
+    this.canvas.height = this.props.glContainer.height;
+
+    let img = new Image();
+    const background = this.state.url + this.getImageName() + this.state.extension;
+
+    const self = this;
+    img.onload = function () {
+      context.drawImage(img, 0, 0, self.canvas.width, self.canvas.height);
+    };
+    img.src = background;
   }
 
   render() {
-    const background = this.state.url + this.getImageName() + this.state.extension;
-    this.style.backgroundImage = "url(" + background + ")";
-
-    return React.createElement("div", { style: this.style });
+    return React.createElement("canvas", { ref: canvas => {
+        this.canvas = canvas;
+      } });
   }
 }
 
