@@ -26,8 +26,10 @@ pip install requriements.txt
 npm install
 luarocks install loadcaffe
 sh model/get_caffemodel.sh
-cd static/images/TestSet
+cd static/images
 curl -O http://benchmark.ini.rub.de/Dataset_GTSDB/TestIJCNN2013.zip
+# unzip to TestSet
+python convertImages.py
 ```
 
 
