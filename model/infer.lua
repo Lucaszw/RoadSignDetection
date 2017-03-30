@@ -2,6 +2,7 @@ require 'image'
 require 'loadcaffe'
 require 'optim'
 
+collectgarbage()
 net = loadcaffe.load('deploy.prototxt', 'snapshot_iter_19140.caffemodel','cudnn')
 net:cuda()
 

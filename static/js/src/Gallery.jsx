@@ -1,8 +1,10 @@
+import {fabric} from 'fabric';
+
 class Gallery extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      url: "http://localhost:5000/static/images/TestSet/",
+      url: "http://localhost:5001/static/images/TestSet/",
       extension: ".jpg",
       index: Math.ceil(Math.random()*299)
     };
@@ -34,21 +36,42 @@ class Gallery extends React.Component {
   }
 
   paint(context){
-    this.canvas.width = this.props.glContainer.width;
-    this.canvas.height = this.props.glContainer.height;
-    
-    let img = new Image();
+    this.canvas = new fabric.Canvas(this.canvas);
+    this.canvas.setWidth(this.props.glContainer.width);
+    this.canvas.setHeight(this.props.glContainer.height);
+
     const background = this.state.url + this.getImageName() + this.state.extension;
 
-    const self = this;
-    img.onload = function(){
-      context.drawImage(img,0,0,self.canvas.width,self.canvas.height);
-    };
-    img.src = background;
+    $.get( "http://localhost:5001/boundingBoxes", { name: this.getImageName() } )
+    .done( (data) => {
+      data = JSON.parse(data);
+
+      fabric.Image.fromURL(background, (img) => {
+        var oImg = img.set({ left: 0, top: 0, width: this.canvas.width, height: this.canvas.height });
+        this.canvas.add(oImg);
+
+        _.each(data, (obj) => {
+          let square = new fabric.Rect({
+              width: obj.w,
+              height: obj.h,
+              left: obj.x,
+              top: obj.y,
+              stroke: 'green',
+              strokeWidth: 3,
+              fill: null
+          });
+
+          this.canvas.add(square);
+          this.canvas.renderAll();
+        });
+      });
+
+    });
+
   }
 
   render(){
-    return <canvas ref={(canvas) => { this.canvas = canvas; }}></canvas>
+    return <canvas id='canvas' ref={(canvas) => { this.canvas = canvas; }}></canvas>
   }
 }
 

@@ -17,10 +17,6 @@ class TestComponent extends React.Component {
   }
 }
 
-
-//Once all components are registered, call
-myLayout.init();
-
 myLayout.registerComponent( 'labels', TestComponent );
 myLayout.registerComponent( 'gallery', Gallery );
 myLayout.registerComponent( 'navigation', Navigation );
