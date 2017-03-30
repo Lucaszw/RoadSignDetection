@@ -9,7 +9,8 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route('/boundingBoxes')
 def boundingBoxes():
-    # print request.args
+    print request.args
+    #  000012
     # Get bounding boxes here:
 
     boxes = []
